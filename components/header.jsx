@@ -10,31 +10,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
-
-  const scrollToSection = (sectionId, semParam = null) => {
+  const scrollToSection = (sectionId) => {
     setIsMenuOpen(false)
 
     setTimeout(() => {
       const section = document.getElementById(sectionId)
       if (section) {
         section.scrollIntoView({ behavior: "smooth" })
-
-        if (semParam && sectionId === "syllabus") {
-          if (typeof window !== "undefined" && typeof window.location !== "undefined") {
-            const url = new URL(window.location.href)
-            url.searchParams.set("sem", semParam)
-            window.history.pushState({}, "", url)
-
-            window.dispatchEvent(
-              new CustomEvent("semesterChange", {
-                detail: { semester: semParam },
-              }),
-            )
-          }
-        }
       }
     }, 100)
   }
@@ -47,65 +29,78 @@ export default function Header() {
           <span className="text-xl font-bold">Ranchhodlal Chhotalal Technical Institute</span>
         </Link>
 
-        <nav className="hidden md:flex md:items-center md:gap-6">
-          <Link
-            href="#"
-            onClick={(e) => {
-              e.preventDefault()
-              scrollToSection("")
-            }}
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Home
-          </Link>
-          <Link
-            href="#about"
-            onClick={(e) => {
-              e.preventDefault()
-              scrollToSection("about")
-            }}
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            About
-          </Link>
+        <nav className="container mx-auto flex justify-between items-center px-4 py-4">
+      <div className="flex items-center justify-between w-full space-x-4">
+        <Link 
+          href="#" 
+          onClick={(e) => {
+            e.preventDefault()
+            scrollToSection("")
+          }}
+          className="flex-1 text-center text-sm font-medium hover:text-primary"
+        >
+          Home
+        </Link>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-1 px-2">
-                Syllabus <ChevronDown className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => scrollToSection("syllabus", "1")}>Semester 1</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => scrollToSection("syllabus", "2")}>Semester 2</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => scrollToSection("syllabus", "3")}>Semester 3</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => scrollToSection("syllabus", "4")}>Semester 4</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => scrollToSection("syllabus", "5")}>Semester 5</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => scrollToSection("syllabus", "6")}>Semester 6</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <Link 
+          href="#about" 
+          onClick={(e) => {
+            e.preventDefault()
+            scrollToSection("about")
+          }}
+          className="flex-1 text-center text-sm font-medium hover:text-primary"
+        >
+          About
+        </Link>
 
-          <Link
-            href="#faculty"
-            onClick={(e) => {
-              e.preventDefault()
-              scrollToSection("faculty")
-            }}
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Faculty
-          </Link>
-          <Link
-            href="#events"
-            onClick={(e) => {
-              e.preventDefault()
-              scrollToSection("events")
-            }}
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Events
-          </Link>
-        </nav>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="ghost" 
+              className="flex-1 flex items-center justify-center gap-1"
+            >
+              Syllabus 
+              <ChevronDown className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {[1, 2, 3, 4, 5, 6].map((sem) => (
+              <DropdownMenuItem 
+                key={sem}
+                onClick={(e) => {
+                  e.preventDefault()
+                  scrollToSection("syllabus")}}
+              >
+                Semester {sem}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <Link 
+          href="#faculty" 
+          onClick={(e) => {
+            e.preventDefault()
+            scrollToSection("faculty")
+          }}
+          className="flex-1 text-center text-sm font-medium hover:text-primary"
+        >
+          Faculty
+        </Link>
+
+        <Link 
+          href="#events" 
+          onClick={(e) => {
+            e.preventDefault()
+            scrollToSection("events")
+          }}
+          className="flex-1 text-center text-sm font-medium hover:text-primary"
+        >
+          Events
+        </Link>
+      </div>
+    </nav>
+
       </div>
     </header>
   )
